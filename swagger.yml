@@ -1,0 +1,94 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file for Atlas API
+  version: "1.0.0"
+  title: Atlas API config
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api
+
+paths:
+  /subscription:
+    get:
+      operationId: routes.subscription.read_all
+      tags:
+        - Subscription
+      summary: Read the entire list of subscriptions
+      description: Entire list of subscriptions, managed based on Stripe
+      parameters:
+        - name: length
+          in: query
+          type: integer
+          description: Number of subscriptions in the list
+          required: False
+      responses:
+        200:
+          description: Successfully read subscriptions list operation
+          schema:
+            type: array
+            items:
+              properties:
+                email:
+                  type: string
+                discord_user_id:
+                  type: string
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                cancelled_at:
+                  type: string
+    post:
+      operationId: routes.subscription.create
+      tags: 
+        - Subscription
+      summary: Create a subscription and add it to subscriptions list
+      description: Create a new subscription in subscriptions list
+      parameters:
+        - name: subscription
+          in: body
+          description: Subscription to create_all
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: email address associated with Stripe subscription
+              discord_user_id:
+                type: string
+                description: unique Discord user ID
+      responses:
+        201:
+          description: Successfully created subscription 
+
+  /subscription/{email_or_discord_user_id}:
+    get:
+      operationId: routes.subscription.read_one
+      tags:
+        - Subscription
+      summary: Read one subscription from the subscriptions list
+      description: Read one subscription from the subscriptions list
+      parameters:
+        - name: email_or_discord_user_id
+          in: path
+          type: string
+          description: Email or Discord user ID associated with the subscription
+          required: True
+      responses:
+        200:
+          description: Successfully read one subscription from subscriptions list operation
+          schema:
+            properties:
+              email:
+                type: string
+              discord_user_id:
+                type: string
+              created_at:
+                type: string
+              updated_at:
+                type: string
+              cancelled_at:
+                type: string
